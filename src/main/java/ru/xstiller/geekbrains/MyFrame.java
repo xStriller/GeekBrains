@@ -45,6 +45,8 @@ public class MyFrame extends JFrame {
         JButton buttonSplit = new JButton("/");
         JButton buttonDot = new JButton(".");
         JButton buttonSquared = new JButton("^");
+        JButton buttonClear = new JButton("C");
+
 
         buttonZero.addActionListener(new ActionListener() {
             @Override
@@ -106,7 +108,14 @@ public class MyFrame extends JFrame {
         buttonSquared.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                calculating(e);
+                action(e);
+            }
+        });
+
+        buttonClear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clear(e);
             }
         });
 
@@ -118,10 +127,16 @@ public class MyFrame extends JFrame {
         jPanel.add(buttonSplit);
         jPanel.add(buttonDot);
         jPanel.add(buttonSquared);
+        jPanel.add(buttonClear);
+
 
 
         add(jPanel);
         setVisible(true);
+    }
+
+    private void clear(ActionEvent e) {
+        textField.setText("");
     }
 
     /**
@@ -131,14 +146,13 @@ public class MyFrame extends JFrame {
      * 4) Записываем текущий символ(+ или -)
      * 5) Если у нас уже записано одно число, проводим операцию и переходим на шаг 2, иначе переходим на шаг 2
      *
-     * @param e
      */
     private void calculating(ActionEvent e) {
         String text = textField.getText();
         String digit = "";
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (c == '-' || c == '+' || c == '*' || c == '/') {
+            if (c == '-' || c == '+' || c == '*' || c == '/' || c == '^') {
                 double currentValue = Double.parseDouble(digit);
                 if (isFirstDigit) {
                     total += currentValue;
@@ -152,6 +166,8 @@ public class MyFrame extends JFrame {
                         total *= currentValue;
                     } else if (operation == '/') {
                         total /= currentValue;
+                    } else if (operation == '^') {
+                        total = Math.pow(total, currentValue);
                     }
                 }
 
@@ -172,6 +188,8 @@ public class MyFrame extends JFrame {
             total *= currentValue;
         } else if (operation == '/') {
             total /= currentValue;
+        } else if (operation == '^') {
+            total = Math.pow(total, currentValue);
         }
 
         isFirstDigit = true;
